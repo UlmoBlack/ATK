@@ -1,0 +1,86 @@
+spring:
+  application:
+    name: galaxy-auth-backend
+  
+  # Database Configuration
+  datasource:
+    # H2 (Development)
+    url: jdbc:h2:mem:galaxydb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+    
+    # PostgreSQL (Production - uncomment)
+    # url: jdbc:postgresql://localhost:5432/galaxydb
+    # driver-class-name: org.postgresql.Driver
+    # username: postgres
+    # password: yourpassword
+  
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop # Development: create-drop, Production: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        # Production için PostgreSQL dialect
+        # dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  # Security
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 3000
+  servlet:
+    context-path: /api
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970} # 256-bit key (PRODUCTION'DA ENV VARIABLE KULLAN!)
+  access-token-expiration: 900000 # 15 dakika (milliseconds)
+  refresh-token-expiration: 604800000 # 7 gün (milliseconds)
+  cookie:
+    access-token-name: galaxy_access_token
+    refresh-token-name: galaxy_refresh_token
+    http-only: true
+    secure: false # Production'da true olmalı (HTTPS)
+    same-site: Lax # CSRF koruması için
+    domain: localhost # Production'da domain ayarla
+    path: /
+
+# CORS Configuration
+cors:
+  allowed-origins: http://localhost:5173,http://localhost:3000
+  allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+  allowed-headers: "*"
+  allow-credentials: true
+  max-age: 3600
+
+# Rate Limiting Configuration (Bucket4j veya Redis ile implement edilebilir)
+rate-limit:
+  login:
+    max-attempts: 5
+    duration: 900000 # 15 dakika
+
+# Logging
+logging:
+  level:
+    com.galaxy: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+

@@ -1,0 +1,23 @@
+package com.galaxy.auth.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * Login Response DTO
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class LoginResponse {
+
+    private String accessToken;
+    private String refreshToken;
+    private UserDto user;
+    private String message;
+}
+
+
